@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Build HTML content for the card
         const card = document.createElement('div');
-        card.className = "bg-charcoal/80 border border-primary/20 p-8 rounded-3xl flex flex-col justify-between shadow-2xl transition-all duration-500 hover:border-primary/40 transform scale-95 opacity-0";
+        card.className = "bg-charcoal/80 border border-primary/20 p-5 sm:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-between shadow-2xl transition-all duration-500 hover:border-primary/40 transform scale-95 opacity-0 snap-center shrink-0 w-[85%] md:w-auto";
         
         let starsHtml = '';
         for (let i = 1; i <= 5; i++) {
