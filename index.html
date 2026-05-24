@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smokehut | Premium Charcoal Grills & Burger Bar</title>
+    <meta name="description" content="Experience the dark smoky luxury of Smokehut. Gourmet burgers, low-and-slow wood-fired grills, and legendary loaded platters. Crafted for the bold.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff4d00',
+                        primaryHover: '#e64500',
+                        secondary: '#161616',
+                        dark: '#080808',
+                        charcoal: '#0f0f0f',
+                        fireGlow: 'rgba(255, 77, 0, 0.15)',
+                    },
+                    fontFamily: {
+                        outfit: ['Outfit', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    animation: {
+                        'glow-slow': 'glowSlow 3s ease-in-out infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                    },
+                    keyframes: {
+                        glowSlow: {
+                            '0%': { boxShadow: '0 0 10px rgba(255, 77, 0, 0.1), inset 0 0 5px rgba(255, 77, 0, 0.05)' },
+                            '100%': { boxShadow: '0 0 30px rgba(255, 77, 0, 0.4), inset 0 0 15px rgba(255, 77, 0, 0.1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-12px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+                            '50%': { opacity: '1', transform: 'scale(1.05)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-dark text-white font-inter overflow-x-hidden antialiased selection:bg-primary selection:text-white">
+
+    <!-- Toast Notification (Success Toast) -->
+    <div id="toast" class="fixed top-28 right-6 bg-charcoal border border-primary/40 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-x-[150%] transition-transform duration-500 z-[999] backdrop-blur-md">
+        <div class="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center text-primary">
+            <i data-lucide="check" class="w-5 h-5"></i>
+        </div>
+        <div>
+            <h5 class="font-outfit font-bold text-sm">Success!</h5>
+            <p class="text-xs text-gray-400" id="toast-message">Demo action completed successfully.</p>
+        </div>
+    </div>
+
+    <!-- Sticky Glassmorphism Header -->
+    <header id="navbar" class="fixed top-0 w-full z-50 transition-all duration-500 py-6 border-b border-transparent">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            
+            <!-- Logo Section -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="relative w-12 h-12 rounded-full overflow-hidden border border-primary/20 bg-charcoal flex items-center justify-center p-1 group-hover:border-primary/60 transition-all duration-300 shadow-lg shadow-black/50">
+                    <img src="assets/logo.png" alt="Smokehut Logo" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent"></div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-outfit font-black text-2xl tracking-tighter uppercase leading-none">Smokehut</span>
+                    <span class="text-[9px] font-mono text-primary tracking-[0.35em] uppercase font-bold mt-1">Premium Grill</span>
+                </div>
+            </a>
+            
+            <!-- Desktop Navigation Links -->
+            <div class="hidden lg:flex items-center gap-8 font-outfit text-xs font-semibold uppercase tracking-[0.15em]">
+                <a href="#about" class="nav-link hover:text-primary transition-colors py-2 text-gray-300">Story</a>
+                <a href="#menu" class="nav-link hover:text-primary transition-colors py-2 text-gray-300">Gourmet Menu</a>
+                <a href="#gallery" class="nav-link hover:text-primary transition-colors py-2 text-gray-300">Visual Feast</a>
+                <a href="#testimonials" class="nav-link hover:text-primary transition-colors py-2 text-gray-300">Vibe Check</a>
+                <a href="#locations" class="nav-link hover:text-primary transition-colors py-2 text-gray-300">Hubs</a>
+                <a href="#contact" class="bg-primary/10 text-primary border border-primary/30 px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition-all hover:scale-105 active:scale-95 duration-300 shadow-lg shadow-primary/5">Reserve Now</a>
+            </div>
+            
+            <!-- Mobile Menu Burger Button -->
+            <button id="menu-toggle-btn" class="lg:hidden text-white hover:text-primary transition-colors p-2 focus:outline-none">
+                <div class="w-7 h-5 flex flex-col justify-between">
+                    <span class="w-full h-0.5 bg-current rounded transition-all duration-300 origin-left" id="burger-line-1"></span>
+                    <span class="w-full h-0.5 bg-current rounded transition-all duration-300" id="burger-line-2"></span>
+                    <span class="w-full h-0.5 bg-current rounded transition-all duration-300 origin-left" id="burger-line-3"></span>
+                </div>
+            </button>
+        </div>
+    </header>
+
+    <!-- Slide-in Mobile Drawer Navigation -->
+    <div id="mobile-menu" class="fixed inset-y-0 right-0 w-80 bg-dark/95 border-l border-white/10 z-[100] transform translate-x-full transition-transform duration-500 ease-out backdrop-blur-xl shadow-2xl flex flex-col justify-between p-8">
+        <div>
+            <div class="flex justify-between items-center mb-12">
+                <div class="flex items-center gap-2">
+                    <img src="assets/logo.png" alt="Smokehut Logo" class="w-8 h-8 rounded-full border border-primary/20">
+                    <span class="font-outfit font-black text-xl tracking-tighter uppercase">Smokehut</span>
+                </div>
+                <button id="menu-close-btn" class="text-gray-400 hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-7 h-7"></i>
+                </button>
+            </div>
+            <div class="flex flex-col gap-6 font-outfit text-lg font-bold uppercase tracking-wider">
+                <a href="#about" class="mobile-nav-link hover:text-primary transition-colors border-b border-white/5 pb-2">Story</a>
+                <a href="#menu" class="mobile-nav-link hover:text-primary transition-colors border-b border-white/5 pb-2">Gourmet Menu</a>
+                <a href="#gallery" class="mobile-nav-link hover:text-primary transition-colors border-b border-white/5 pb-2">Visual Feast</a>
+                <a href="#testimonials" class="mobile-nav-link hover:text-primary transition-colors border-b border-white/5 pb-2">Vibe Check</a>
+                <a href="#locations" class="mobile-nav-link hover:text-primary transition-colors border-b border-white/5 pb-2">Hubs</a>
+                <a href="#contact" class="mobile-nav-link bg-primary text-white text-center py-4 rounded-xl shadow-lg shadow-primary/20 mt-4">Reserve Now</a>
+            </div>
+        </div>
+        
+        <!-- Masked contact info in mobile drawer -->
+        <div class="border-t border-white/10 pt-6">
+            <div class="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                <i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i>
+                <span>Interactive Secure Demo</span>
+            </div>
+            <div class="text-[11px] font-mono text-gray-400 space-y-1">
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="phone" class="w-3 h-3 text-primary"></i>
+                    <span class="blur-reveal cursor-pointer text-gray-400 select-none transition-all duration-300 font-mono hover:text-white" title="Hover to reveal contact info">+1 (555) 019-•••</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="mail" class="w-3 h-3 text-primary"></i>
+                    <span class="blur-reveal cursor-pointer text-gray-400 select-none transition-all duration-300 font-mono hover:text-white" title="Hover to reveal contact info">contact@smokehut.•••</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mobile Menu Backdrop Overlay -->
+    <div id="menu-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[99] hidden transition-opacity duration-500 opacity-0"></div>
+
+    <!-- Hero Section with Cinematic Background & Glow -->
+    <section class="relative h-[95vh] md:h-screen flex items-center justify-center overflow-hidden">
+        <!-- Cinematic Background Zoom-in Animation -->
+        <div class="absolute inset-0 z-0">
+            <img src="assets/hero.png" alt="Smokehut Premium BBQ Burger" class="w-full h-full object-cover scale-105 animate-[zoomOut_20s_infinite_alternate]">
+            <div class="absolute inset-0 bg-gradient-to-b from-dark/60 via-dark/30 to-dark"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-dark/80 via-transparent to-dark/60"></div>
+            <!-- Dynamic Fire Sparks Glow Overlay -->
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(255,77,0,0.12)_0%,transparent_60%)]"></div>
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="container mx-auto px-6 relative z-10 text-center lg:text-left">
+            <div class="max-w-4xl mx-auto lg:mx-0">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 border border-primary/20 text-primary font-outfit font-extrabold rounded-full text-[10px] md:text-xs uppercase tracking-[0.25em] mb-8 animate-pulse shadow-lg shadow-primary/5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+                    Now Grilling Low & Slow
+                </div>
+                <h1 class="font-outfit font-black text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] mb-6 leading-[0.9] tracking-tighter uppercase">
+                    The Ultimate <br class="hidden md:inline">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-orange-500 to-amber-500 drop-shadow-2xl">Smokehut</span> <br class="hidden lg:inline">
+                    Experience
+                </h1>
+                <p class="text-gray-300 text-sm sm:text-base md:text-lg lg:text-xl mb-12 max-w-2xl leading-relaxed mx-auto lg:mx-0">
+                    Sizzling textures, oakwood smoke aroma, and legendary craft burgers. Step into the premier urban dining hub built for local food connoisseurs.
+                </p>
+                
+                <!-- CTA buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#menu" class="px-8 py-5 bg-primary text-white font-outfit font-bold rounded-xl hover:bg-primaryHover transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/25 flex items-center justify-center gap-2 group duration-300">
+                        Explore Gourmet Menu
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300"></i>
+                    </a>
+                    <a href="#locations" class="px-8 py-5 bg-white/5 border border-white/10 backdrop-blur-md text-white font-outfit font-bold rounded-xl hover:bg-white/10 hover:border-white/20 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 duration-300">
+                        Our Hubs
+                        <i data-lucide="map-pin" class="w-4 h-4 text-primary"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Grill Badges (Dynamic visual elements) -->
+        <div class="absolute bottom-16 right-16 hidden xl:flex items-center gap-4 bg-charcoal/80 border border-white/5 backdrop-blur-md p-4 rounded-2xl animate-float">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                <i data-lucide="award" class="text-primary w-6 h-6"></i>
+            </div>
+            <div>
+                <h4 class="font-outfit font-bold text-sm">Voted #1 BBQ Spot</h4>
+                <p class="text-xs text-gray-500">Fast Casual Food Awards</p>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-40 hover:opacity-100 transition-opacity">
+            <a href="#about" aria-label="Scroll Down">
+                <i data-lucide="chevron-down" class="w-8 h-8"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Status Stats Bar -->
+    <div class="bg-charcoal border-y border-white/5 py-12 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(255,77,0,0.03)_0%,transparent_40%)]"></div>
+        <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
+            <div class="text-center group">
+                <div class="text-3xl md:text-5xl font-outfit font-black text-primary mb-1 group-hover:scale-105 transition-transform duration-300">18k+</div>
+                <div class="text-gray-500 text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold">Happy Foodies</div>
+            </div>
+            <div class="text-center border-l border-white/5 group">
+                <div class="text-3xl md:text-5xl font-outfit font-black text-primary mb-1 group-hover:scale-105 transition-transform duration-300">100%</div>
+                <div class="text-gray-500 text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold">Wood-Fired Smoke</div>
+            </div>
+            <div class="text-center border-l border-white/5 group">
+                <div class="text-3xl md:text-5xl font-outfit font-black text-primary mb-1 group-hover:scale-105 transition-transform duration-300">5.0 ★</div>
+                <div class="text-gray-500 text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold">Hygiene Rating</div>
+            </div>
+            <div class="text-center border-l border-white/5 group">
+                <div class="text-3xl md:text-5xl font-outfit font-black text-primary mb-1 group-hover:scale-105 transition-transform duration-300">24/7</div>
+                <div class="text-gray-500 text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold">Online Support</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section / Brand Story -->
+    <section id="about" class="py-28 relative overflow-hidden">
+        <!-- Fire light glow effect background -->
+        <div class="absolute -right-40 top-40 w-96 h-96 bg-primary/5 blur-[120px] rounded-full"></div>
+        <div class="absolute -left-40 bottom-40 w-96 h-96 bg-orange-600/5 blur-[120px] rounded-full"></div>
+        
+        <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center gap-16">
+            
+            <!-- Left Side Image Box -->
+            <div class="w-full lg:w-1/2 relative group">
+                <div class="absolute -inset-4 bg-primary/10 blur-3xl opacity-50 group-hover:opacity-85 transition-opacity duration-700"></div>
+                <div class="relative rounded-3xl overflow-hidden border border-white/10 aspect-[4/3] md:aspect-video lg:aspect-square bg-charcoal">
+                    <img src="assets/ambience.png" alt="Smokehut Vibe Ambience" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/10 to-transparent"></div>
+                </div>
+                
+                <!-- Overlay Card in About image -->
+                <div class="absolute -bottom-6 -right-6 md:right-8 bg-charcoal/90 border border-white/10 backdrop-blur-md rounded-2xl p-6 shadow-2xl flex items-center gap-4 max-w-[260px] animate-float">
+                    <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-primary/20">
+                        <i data-lucide="flame" class="text-white w-6 h-6 animate-pulse"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-500 uppercase tracking-widest block font-bold">Smoked Secret</span>
+                        <span class="font-outfit font-bold text-sm text-white">Applewood & Oak slow combustion</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Side Content Box -->
+            <div class="w-full lg:w-1/2">
+                <span class="text-primary font-outfit font-extrabold uppercase tracking-[0.3em] text-xs mb-4 block">The Culinary Rebellion</span>
+                <h2 class="font-outfit font-black text-4xl md:text-5xl lg:text-6xl mb-8 leading-tight uppercase">
+                    DRIVEN BY OAK, <br>
+                    DEFINED BY FLAVOR.
+                </h2>
+                <p class="text-gray-400 text-base md:text-lg leading-relaxed mb-8">
+                    Smokehut isn’t a typical grill cafe. It's a sanctuary for the late-night fast food culture and gourmet grill lovers. We set out to challenge the ordinary by combining premium quality meats with modern, social-media-driven aesthetic presentations.
+                </p>
+                <p class="text-gray-500 text-sm leading-relaxed mb-10">
+                    Every dish that leaves our hot-station is infused with the crisp aroma of traditional firewood smoke, handcrafted sauces, and perfectly balanced fusion ingredients. Made fresh, served bold.
+                </p>
+                
+                <!-- Core Values Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-charcoal border border-white/5 rounded-2xl flex items-center justify-center shrink-0 group-hover:border-primary/20 transition-colors">
+                            <i data-lucide="chef-hat" class="text-primary w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-outfit font-bold text-base mb-1">Gourmet Standard</h4>
+                            <p class="text-gray-500 text-xs leading-relaxed">Artisanal buns, custom double patties, and premium select brisket cuts.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-charcoal border border-white/5 rounded-2xl flex items-center justify-center shrink-0">
+                            <i data-lucide="cookie" class="text-primary w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-outfit font-bold text-base mb-1">Modern Ambience</h4>
+                            <p class="text-gray-500 text-xs leading-relaxed">Neon glow, minimalist industrial layouts, and highly photogenic cuisine presentation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Interactive Gourmet Menu with Live Filtering -->
+    <section id="menu" class="py-28 bg-charcoal/40 relative">
+        <div class="container mx-auto px-6">
+            
+            <!-- Menu Heading -->
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-primary font-outfit font-extrabold uppercase tracking-[0.3em] text-xs mb-4 block">Crafted with Pure Passion</span>
+                <h2 class="font-outfit font-black text-4xl md:text-5xl lg:text-6xl mb-6 uppercase">GOURMET SELECTIONS</h2>
+                <p class="text-gray-400">Low-and-slow wood-fired barbecue, towering double patties, and mouthwatering loaded platters filtered to your craving.</p>
+            </div>
+            
+            <!-- Interactive Category Tabs -->
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-16 font-outfit text-xs md:text-sm font-bold uppercase tracking-wider">
+                <button class="menu-tab-btn active px-6 py-3 rounded-xl border border-primary/20 bg-primary text-white transition-all shadow-lg shadow-primary/10" data-category="all">All Specialties</button>
+                <button class="menu-tab-btn px-6 py-3 rounded-xl border border-white/5 bg-charcoal text-gray-400 hover:text-white hover:border-white/10 transition-all" data-category="burgers">Burgers</button>
+                <button class="menu-tab-btn px-6 py-3 rounded-xl border border-white/5 bg-charcoal text-gray-400 hover:text-white hover:border-white/10 transition-all" data-category="grills">BBQ & Grills</button>
+                <button class="menu-tab-btn px-6 py-3 rounded-xl border border-white/5 bg-charcoal text-gray-400 hover:text-white hover:border-white/10 transition-all" data-category="platters">Loaded Platters</button>
+                <button class="menu-tab-btn px-6 py-3 rounded-xl border border-white/5 bg-charcoal text-gray-400 hover:text-white hover:border-white/10 transition-all" data-category="mocktails">Mocktails</button>
+            </div>
+            
+            <!-- Menu Grid Container -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu-grid">
+                
+                <!-- Item 1 (Grills) -->
+                <div class="menu-item-card group bg-dark border border-white/5 rounded-3xl p-4 transition-all duration-500 hover:border-primary/40 hover:-translate-y-2 flex flex-col justify-between" data-item-cat="grills">
+                    <div>
+                        <div class="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-charcoal">
+                            <img src="assets/wings.png" alt="Fiery Applewood BBQ Wings" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-4 left-4 bg-primary text-white font-outfit font-extrabold text-[9px] uppercase tracking-widest px-3 py-1 rounded-full">Trending</div>
+                        </div>
+                        <div class="px-2">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-outfit font-black text-xl md:text-2xl group-hover:text-primary transition-colors">Fiery BBQ Wings</h3>
+                                <span class="text-primary font-outfit font-black text-lg md:text-xl">₹249</span>
+                            </div>
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6">Slow-grilled chicken wings glazed in our custom oakwood-infused house BBQ glaze. Crisp, smoky, and intensely packed.</p>
+                        </div>
+                    </div>
+                    <div class="px-2">
+                        <button class="add-to-cart-btn w-full py-4 rounded-xl border border-white/10 group-hover:bg-primary group-hover:border-primary transition-all font-outfit font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 duration-300">
+                            Add to Order Basket
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 2 (Burgers) -->
+                <div class="menu-item-card group bg-dark border border-white/5 rounded-3xl p-4 transition-all duration-500 hover:border-primary/40 hover:-translate-y-2 flex flex-col justify-between" data-item-cat="burgers">
+                    <div>
+                        <div class="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-charcoal">
+                            <img src="assets/hero.png" alt="Ultimate Smokehut Tower Burger" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-4 left-4 bg-primary text-white font-outfit font-extrabold text-[9px] uppercase tracking-widest px-3 py-1 rounded-full">Bestseller</div>
+                        </div>
+                        <div class="px-2">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-outfit font-black text-xl md:text-2xl group-hover:text-primary transition-colors">Tower BBQ Burger</h3>
+                                <span class="text-primary font-outfit font-black text-lg md:text-xl">₹389</span>
+                            </div>
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6">Double prime beef blend patty, oakwood-smoked pulled beef chunk, extra double cheddar cheese, and signature smoked glaze.</p>
+                        </div>
+                    </div>
+                    <div class="px-2">
+                        <button class="add-to-cart-btn w-full py-4 rounded-xl border border-white/10 group-hover:bg-primary group-hover:border-primary transition-all font-outfit font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 duration-300">
+                            Add to Order Basket
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 3 (Platters) -->
+                <div class="menu-item-card group bg-dark border border-white/5 rounded-3xl p-4 transition-all duration-500 hover:border-primary/40 hover:-translate-y-2 flex flex-col justify-between" data-item-cat="platters">
+                    <div>
+                        <div class="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-charcoal">
+                            <img src="assets/platter.png" alt="Grand Loaded Charcoal Platter" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-4 left-4 bg-primary text-white font-outfit font-extrabold text-[9px] uppercase tracking-widest px-3 py-1 rounded-full">Signature</div>
+                        </div>
+                        <div class="px-2">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-outfit font-black text-xl md:text-2xl group-hover:text-primary transition-colors">Ultimate Grill Feast</h3>
+                                <span class="text-primary font-outfit font-black text-lg md:text-xl">₹1299</span>
+                            </div>
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6">Massive combo loaded platter containing BBQ wings, dry-rubbed skewers, mandi-spiced smoked rice, custom house dips, and fries.</p>
+                        </div>
+                    </div>
+                    <div class="px-2">
+                        <button class="add-to-cart-btn w-full py-4 rounded-xl border border-white/10 group-hover:bg-primary group-hover:border-primary transition-all font-outfit font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 duration-300">
+                            Add to Order Basket
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item 4 (Grills) -->
+                <div class="menu-item-card group bg-dark border border-white/5 rounded-3xl p-4 transition-all duration-500 hover:border-primary/40 hover:-translate-y-2 flex flex-col justify-between" data-item-cat="grills">
+                    <div>
+                        <div class="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-charcoal">
+                            <img src="assets/ambience.png" alt="Traditional Peri Peri Mandi" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-4 left-4 bg-primary text-white font-outfit font-extrabold text-[9px] uppercase tracking-widest px-3 py-1 rounded-full">Arabian Fusion</div>
+                        </div>
+                        <div class="px-2">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-outfit font-black text-xl md:text-2xl group-hover:text-primary transition-colors">Peri Peri Mandi Grill</h3>
+                                <span class="text-primary font-outfit font-black text-lg md:text-xl">₹549</span>
+                            </div>
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6">Authentic Yemeni basmati slow-cooked under ground, topped with half wood-grilled chicken glazed with fiery peri peri pepper juice.</p>
+                        </div>
+                    </div>
+                    <div class="px-2">
+                        <button class="add-to-cart-btn w-full py-4 rounded-xl border border-white/10 group-hover:bg-primary group-hover:border-primary transition-all font-outfit font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 duration-300">
+                            Add to Order Basket
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 5 (Burgers) -->
+                <div class="menu-item-card group bg-dark border border-white/5 rounded-3xl p-4 transition-all duration-500 hover:border-primary/40 hover:-translate-y-2 flex flex-col justify-between" data-item-cat="burgers">
+                    <div>
+                        <div class="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-charcoal">
+                            <img src="assets/hero.png" alt="Smoked Honey Glazed Crispy Chicken Burger" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-4 left-4 bg-primary text-white font-outfit font-extrabold text-[9px] uppercase tracking-widest px-3 py-1 rounded-full">Crunchy</div>
+                        </div>
+                        <div class="px-2">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-outfit font-black text-xl md:text-2xl group-hover:text-primary transition-colors">Smoky Honey Glazed</h3>
+                                <span class="text-primary font-outfit font-black text-lg md:text-xl">₹329</span>
+                            </div>
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6">Crisp-fried premium chicken thigh hand-dipped in wood-smoke honey glaze, served with jalapeno paste on toasted bun.</p>
+                        </div>
+                    </div>
+                    <div class="px-2">
+                        <button class="add-to-cart-btn w-full py-4 rounded-xl border border-white/10 group-hover:bg-primary group-hover:border-primary transition-all font-outfit font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 duration-300">
+                            Add to Order Basket
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 6 (Mocktails) -->
+                <div class="menu-item-card group bg-dark border border-white/5 rounded-3xl p-4 transition-all duration-500 hover:border-primary/40 hover:-translate-y-2 flex flex-col justify-between" data-item-cat="mocktails">
+                    <div>
+                        <div class="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 bg-charcoal">
+                            <img src="assets/wings.png" alt="Signature Smoked Orange Mocktail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-4 left-4 bg-primary text-white font-outfit font-extrabold text-[9px] uppercase tracking-widest px-3 py-1 rounded-full">Refreshing</div>
+                        </div>
+                        <div class="px-2">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-outfit font-black text-xl md:text-2xl group-hover:text-primary transition-colors">Smoked Orange Zest</h3>
+                                <span class="text-primary font-outfit font-black text-lg md:text-xl">₹189</span>
+                            </div>
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6">Zesty orange mocktail smoked at the bar counter with applewood chips, fresh mint, and sparkling premium soda base.</p>
+                        </div>
+                    </div>
+                    <div class="px-2">
+                        <button class="add-to-cart-btn w-full py-4 rounded-xl border border-white/10 group-hover:bg-primary group-hover:border-primary transition-all font-outfit font-bold uppercase text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 duration-300">
+                            Add to Order Basket
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="mt-20 text-center">
+                <a href="#" class="inline-flex items-center gap-2 text-white font-outfit font-bold border-b border-primary pb-1.5 hover:text-primary transition-colors duration-300">
+                    Download Full Digital Menu (PDF)
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visual Food Gallery with Responsive Layout & Interactive Lightbox Modal -->
+    <section id="gallery" class="py-28 relative">
+        <div class="container mx-auto px-6">
+            
+            <!-- Gallery Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+                <div class="max-w-xl">
+                    <span class="text-primary font-outfit font-extrabold uppercase tracking-[0.3em] text-xs mb-4 block">Visual Feast</span>
+                    <h2 class="font-outfit font-black text-4xl md:text-5xl lg:text-6xl uppercase leading-none">THE CRAVE ARCHIVE</h2>
+                </div>
+                <div>
+                    <a href="https://instagram.com/smokehut_premium" target="_blank" class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white border border-white/10 rounded-xl px-5 py-3 hover:bg-white/5 transition-all duration-300">
+                        Follow @smokehut_premium
+                        <i data-lucide="instagram" class="w-4 h-4 text-primary"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Masonry Grid for Photos -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6" id="gallery-grid">
+                
+                <div class="gallery-item col-span-2 row-span-2 rounded-3xl overflow-hidden group border border-white/10 cursor-zoom-in relative bg-charcoal aspect-[4/3] md:aspect-square">
+                    <img src="assets/hero.png" alt="Signature Smoked Burgers" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <i data-lucide="maximize-2" class="w-10 h-10 text-white animate-pulse"></i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item rounded-3xl overflow-hidden group border border-white/10 cursor-zoom-in relative bg-charcoal aspect-square">
+                    <img src="assets/wings.png" alt="Glazed BBQ Wings" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <i data-lucide="maximize-2" class="w-6 h-6 text-white"></i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item rounded-3xl overflow-hidden group border border-white/10 cursor-zoom-in relative bg-charcoal aspect-square">
+                    <img src="assets/ambience.png" alt="Industrial Neon Ambience" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <i data-lucide="maximize-2" class="w-6 h-6 text-white"></i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item rounded-3xl overflow-hidden group border border-white/10 cursor-zoom-in relative bg-charcoal aspect-square">
+                    <img src="assets/platter.png" alt="Charcoal Grilled Platter" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <i data-lucide="maximize-2" class="w-6 h-6 text-white"></i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item rounded-3xl overflow-hidden group border border-white/10 cursor-zoom-in relative bg-charcoal aspect-square">
+                    <img src="assets/hero.png" alt="Fresh Melted Cheese Pull" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <i data-lucide="maximize-2" class="w-6 h-6 text-white"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Image Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 bg-black/95 backdrop-blur-md z-[999] hidden flex-col items-center justify-center p-4 select-none opacity-0 transition-opacity duration-300">
+        <button id="lightbox-close" class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors p-2" aria-label="Close Lightbox">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+        <div class="max-w-4xl max-h-[75vh] relative flex items-center justify-center">
+            <img src="" id="lightbox-img" alt="Zoomed image" class="max-w-full max-h-full rounded-2xl border border-white/10 object-contain shadow-2xl">
+        </div>
+        <p class="text-gray-400 font-outfit text-sm mt-6 uppercase tracking-wider" id="lightbox-caption">Caption</p>
+    </div>
+
+    <!-- Testimonials / Guest Feedbacks & Submitting System -->
+    <section id="testimonials" class="py-28 bg-dark relative overflow-hidden">
+        <!-- Orange/Amber visual glow points -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 blur-[150px] pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-orange-600/5 blur-[150px] pointer-events-none"></div>
+        
+        <div class="container mx-auto px-6">
+            
+            <div class="text-center max-w-2xl mx-auto mb-20">
+                <span class="text-primary font-outfit font-extrabold uppercase tracking-[0.3em] text-xs mb-4 block">Unfiltered Reviews</span>
+                <h2 class="font-outfit font-black text-4xl md:text-5xl lg:text-6xl uppercase">THE SOCIAL CHATTER</h2>
+                <p class="text-gray-400">Read what local foodies, burger lovers, and grill critics have to say about the Smokehut experience.</p>
+            </div>
+            
+            <!-- Cards Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20" id="reviews-row">
+                
+                <!-- Review Card 1 -->
+                <div class="bg-charcoal/80 border border-white/5 p-8 rounded-3xl flex flex-col justify-between shadow-xl">
+                    <div>
+                        <div class="flex gap-1 mb-6 text-primary">
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                        </div>
+                        <p class="text-gray-300 italic text-sm leading-relaxed mb-8">"The smoked honey crispy chicken burger is a spiritual experience. Perfectly balanced sweetness, absolute crunch, and that clean applewood smoke aroma."</p>
+                    </div>
+                    <div class="flex items-center gap-4 border-t border-white/5 pt-6">
+                        <div class="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center font-outfit font-bold text-primary text-xs">AJ</div>
+                        <div>
+                            <h4 class="font-outfit font-bold text-sm">Adithya J.</h4>
+                            <p class="text-gray-500 text-[10px] uppercase tracking-wider">Verified Food Critic</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Review Card (Highlighted in Orange border) -->
+                <div class="bg-charcoal border border-primary/30 p-8 rounded-3xl flex flex-col justify-between shadow-2xl relative">
+                    <div class="absolute -top-3 right-8 bg-primary text-white text-[9px] font-outfit font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Featured Review</div>
+                    <div>
+                        <div class="flex gap-1 mb-6 text-primary">
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                        </div>
+                        <p class="text-gray-100 italic text-sm font-medium leading-relaxed mb-8">"Absolute beast of a burger. The double patties are incredibly juicy, the woodsmoke flavor cuts through perfectly. Instantly became my absolute favorite spot!"</p>
+                    </div>
+                    <div class="flex items-center gap-4 border-t border-white/10 pt-6">
+                        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-outfit font-bold text-white text-xs">RK</div>
+                        <div>
+                            <h4 class="font-outfit font-bold text-sm text-white">Rohan K.</h4>
+                            <p class="text-primary text-[10px] uppercase tracking-wider font-bold">Local Guide</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Card 3 -->
+                <div class="bg-charcoal/80 border border-white/5 p-8 rounded-3xl flex flex-col justify-between shadow-xl">
+                    <div>
+                        <div class="flex gap-1 mb-6 text-primary">
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-primary"></i>
+                        </div>
+                        <p class="text-gray-300 italic text-sm leading-relaxed mb-8">"Vibrant industrial neon vibe and highly creative food plating. The Ultimate Platter is a party trick - huge variety and those custom sauce dips are delicious."</p>
+                    </div>
+                    <div class="flex items-center gap-4 border-t border-white/5 pt-6">
+                        <div class="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center font-outfit font-bold text-primary text-xs">SN</div>
+                        <div>
+                            <h4 class="font-outfit font-bold text-sm">Shreya N.</h4>
+                            <p class="text-gray-500 text-[10px] uppercase tracking-wider">Lifestyle Blogger</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Submit a Demo Review (WOW interactivity) -->
+            <div class="max-w-xl mx-auto bg-charcoal border border-white/5 rounded-3xl p-8 shadow-2xl relative">
+                <h4 class="font-outfit font-black text-xl md:text-2xl mb-6 text-center uppercase tracking-wide">LEAVE A REVIEW</h4>
+                
+                <form id="review-form" class="space-y-6">
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold">Rating</label>
+                        <!-- Star Selection -->
+                        <div class="flex gap-2 text-gray-600 cursor-pointer text-2xl" id="form-stars">
+                            <i data-lucide="star" class="star-rating w-6 h-6 hover:text-primary transition-colors" data-star="1"></i>
+                            <i data-lucide="star" class="star-rating w-6 h-6 hover:text-primary transition-colors" data-star="2"></i>
+                            <i data-lucide="star" class="star-rating w-6 h-6 hover:text-primary transition-colors" data-star="3"></i>
+                            <i data-lucide="star" class="star-rating w-6 h-6 hover:text-primary transition-colors" data-star="4"></i>
+                            <i data-lucide="star" class="star-rating w-6 h-6 hover:text-primary transition-colors" data-star="5"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="rev-name" class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold">Your Name</label>
+                            <input type="text" id="rev-name" required class="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary text-white" placeholder="e.g. Alex Carter">
+                        </div>
+                        <div>
+                            <label for="rev-title" class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold">Tagline</label>
+                            <input type="text" id="rev-title" required class="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary text-white" placeholder="e.g. Burger Enthusiast">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="rev-text" class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold">Your Review</label>
+                        <textarea id="rev-text" rows="3" required class="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary text-white resize-none" placeholder="What did you think of the wood smoke flavor?"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full py-4 bg-primary text-white font-outfit font-bold rounded-xl hover:bg-primaryHover transition-all flex items-center justify-center gap-2 duration-300">
+                        Post Live Feedback
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Map Locations & Premium Masked Details -->
+    <section id="locations" class="py-28 bg-charcoal relative">
+        <div class="container mx-auto px-6">
+            
+            <div class="text-center max-w-2xl mx-auto mb-20">
+                <span class="text-primary font-outfit font-extrabold uppercase tracking-[0.3em] text-xs mb-4 block">Visit Smokehut</span>
+                <h2 class="font-outfit font-black text-4xl md:text-5xl lg:text-6xl uppercase">LOCATE OUR HUBS</h2>
+                <p class="text-gray-400">Find the glowing neon sign near you. Contact details are securely masked for demo privacy. Hover over a blocked details to instantly unblur.</p>
+            </div>
+            
+            <!-- Locations Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <!-- Hub 1 -->
+                <div class="bg-dark rounded-3xl overflow-hidden border border-white/10 group flex flex-col justify-between shadow-xl">
+                    <div class="h-72 relative bg-gray-900 overflow-hidden">
+                        <img src="assets/ambience.png" alt="Downtown location Map Mockup" class="w-full h-full object-cover opacity-30 grayscale group-hover:opacity-50 transition-all duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary shadow-2xl animate-bounce">
+                                <i data-lucide="map-pin" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <span class="px-3 py-1 bg-primary/10 border border-primary/20 text-primary font-outfit font-bold rounded-full text-[9px] uppercase tracking-widest mb-4 inline-block">Flagship Hub</span>
+                        <h3 class="font-outfit font-black text-3xl mb-4 group-hover:text-primary transition-colors">Downtown Smokehut</h3>
+                        
+                        <!-- Masked Address with gorgeous interactive hover reveal -->
+                        <div class="space-y-4 text-sm text-gray-400 mb-8 font-mono">
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="navigation" class="w-5 h-5 text-primary shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="block text-xs uppercase tracking-wider text-gray-500 font-bold mb-1 font-outfit">Address</span>
+                                    <span class="blur-reveal font-mono cursor-pointer select-none text-gray-400 hover:text-white transition-all duration-500 rounded bg-white/5 px-2 py-0.5 border border-white/5" title="Hover to reveal protected address">
+                                        123 Gourmet Street, Downtown Plaza, Suite 400, NY 10001
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="phone" class="w-5 h-5 text-primary shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="block text-xs uppercase tracking-wider text-gray-500 font-bold mb-1 font-outfit">Direct Reservation</span>
+                                    <span class="blur-reveal font-mono cursor-pointer select-none text-gray-400 hover:text-white transition-all duration-500 rounded bg-white/5 px-2 py-0.5 border border-white/5" title="Hover to reveal protected phone">
+                                        +1 (555) 102-3901
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <button class="demo-btn flex-1 py-4 bg-primary text-white font-outfit font-bold rounded-xl hover:bg-primaryHover transition-all text-center tracking-wider text-xs uppercase shadow-lg shadow-primary/15" data-action="Initiating VoIP direct dial to Downtown branch...">Direct Call</button>
+                            <a href="https://maps.google.com" target="_blank" class="px-5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center justify-center">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-400"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hub 2 -->
+                <div class="bg-dark rounded-3xl overflow-hidden border border-white/10 group flex flex-col justify-between shadow-xl">
+                    <div class="h-72 relative bg-gray-900 overflow-hidden">
+                        <img src="assets/ambience.png" alt="Waterfront location Map Mockup" class="w-full h-full object-cover opacity-30 grayscale group-hover:opacity-50 transition-all duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary shadow-2xl animate-bounce">
+                                <i data-lucide="map-pin" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <span class="px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-500 font-outfit font-bold rounded-full text-[9px] uppercase tracking-widest mb-4 inline-block">Waterfront Diner</span>
+                        <h3 class="font-outfit font-black text-3xl mb-4 group-hover:text-primary transition-colors">Harbor Smokehut</h3>
+                        
+                        <!-- Masked Address with gorgeous interactive hover reveal -->
+                        <div class="space-y-4 text-sm text-gray-400 mb-8 font-mono">
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="navigation" class="w-5 h-5 text-primary shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="block text-xs uppercase tracking-wider text-gray-500 font-bold mb-1 font-outfit">Address</span>
+                                    <span class="blur-reveal font-mono cursor-pointer select-none text-gray-400 hover:text-white transition-all duration-500 rounded bg-white/5 px-2 py-0.5 border border-white/5" title="Hover to reveal protected address">
+                                        456 Beachside Boulevard, Harbor Walk, Cabana 12, CA 90210
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i data-lucide="phone" class="w-5 h-5 text-primary shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="block text-xs uppercase tracking-wider text-gray-500 font-bold mb-1 font-outfit">Direct Reservation</span>
+                                    <span class="blur-reveal font-mono cursor-pointer select-none text-gray-400 hover:text-white transition-all duration-500 rounded bg-white/5 px-2 py-0.5 border border-white/5" title="Hover to reveal protected phone">
+                                        +1 (555) 204-7831
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <button class="demo-btn flex-1 py-4 bg-primary text-white font-outfit font-bold rounded-xl hover:bg-primaryHover transition-all text-center tracking-wider text-xs uppercase shadow-lg shadow-primary/15" data-action="Initiating VoIP direct dial to Harbor branch...">Direct Call</button>
+                            <a href="https://maps.google.com" target="_blank" class="px-5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center justify-center">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-400"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Footer / Live Contact & Social Media Feed Preview -->
+    <footer id="contact" class="bg-dark pt-28 pb-12 relative overflow-hidden border-t border-white/5">
+        <div class="container mx-auto px-6">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-16 mb-20">
+                
+                <!-- Brand Summary Info -->
+                <div class="lg:col-span-2 space-y-8">
+                    <a href="#" class="flex items-center gap-3 group">
+                        <img src="assets/logo.png" alt="Smokehut Footer Logo" class="w-12 h-12 rounded-full border border-primary/20 group-hover:scale-105 transition-transform">
+                        <div class="flex flex-col">
+                            <span class="font-outfit font-black text-3xl tracking-tighter uppercase leading-none">Smokehut</span>
+                            <span class="text-[9px] font-mono text-primary tracking-[0.35em] uppercase font-bold mt-1">Premium Grill</span>
+                        </div>
+                    </a>
+                    <p class="text-gray-400 text-base max-w-md leading-relaxed">
+                        Redefining slow wood-smoke combustion food. Impeccable taste, vibrant youth culture ambience, and gorgeous gourmet designs.
+                    </p>
+                    
+                    <!-- Dynamic interactive socials buttons -->
+                    <div class="flex gap-3">
+                        <a href="https://instagram.com/smokehut_premium" target="_blank" class="w-12 h-12 bg-charcoal border border-white/5 rounded-full flex items-center justify-center hover:bg-primary hover:border-primary transition-all text-white duration-300">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="demo-btn w-12 h-12 bg-charcoal border border-white/5 rounded-full flex items-center justify-center hover:bg-primary hover:border-primary transition-all text-white duration-300" data-action="Navigating to Smokehut Facebook page...">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="demo-btn w-12 h-12 bg-charcoal border border-white/5 rounded-full flex items-center justify-center hover:bg-primary hover:border-primary transition-all text-white duration-300" data-action="Connecting to Smokehut Twitter stream...">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="demo-btn w-12 h-12 bg-charcoal border border-white/5 rounded-full flex items-center justify-center hover:bg-green-600 hover:border-green-600 transition-all text-white duration-300" data-action="Redirecting to secure WhatsApp checkout channel...">
+                            <i data-lucide="message-circle" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Navigation Links -->
+                <div>
+                    <h4 class="font-outfit font-bold text-sm mb-8 uppercase tracking-[0.2em] text-primary">Explore</h4>
+                    <ul class="space-y-4 text-sm text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-white transition-colors duration-300">Back to Top</a></li>
+                        <li><a href="#about" class="hover:text-white transition-colors duration-300">Brand History</a></li>
+                        <li><a href="#menu" class="hover:text-white transition-colors duration-300">Gourmet Specialties</a></li>
+                        <li><a href="#gallery" class="hover:text-white transition-colors duration-300">The Visual Archive</a></li>
+                        <li><a href="#testimonials" class="hover:text-white transition-colors duration-300">Live Customer Reviews</a></li>
+                    </ul>
+                </div>
+
+                <!-- Hours & Masked Phone/Email details -->
+                <div>
+                    <h4 class="font-outfit font-bold text-sm mb-8 uppercase tracking-[0.2em] text-primary">Direct Contact</h4>
+                    <div class="space-y-6 text-sm text-gray-400 font-mono">
+                        <div>
+                            <span class="block text-xs uppercase tracking-wider text-gray-500 font-bold mb-1 font-outfit">Main Hotline</span>
+                            <span class="blur-reveal cursor-pointer select-none text-gray-400 hover:text-white transition-all duration-500 rounded bg-white/5 px-2 py-0.5 border border-white/5" title="Hover to reveal contact info">
+                                +1 (555) 019-9947
+                            </span>
+                        </div>
+                        <div>
+                            <span class="block text-xs uppercase tracking-wider text-gray-500 font-bold mb-1 font-outfit">Email Support</span>
+                            <span class="blur-reveal cursor-pointer select-none text-gray-400 hover:text-white transition-all duration-500 rounded bg-white/5 px-2 py-0.5 border border-white/5" title="Hover to reveal contact info">
+                                reserves@smokehut.com
+                            </span>
+                        </div>
+                        <div class="pt-2">
+                            <span class="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest font-outfit">
+                                <i data-lucide="clock" class="w-4 h-4 animate-spin-slow"></i>
+                                Open Now Grilling
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- Legal Bar -->
+            <div class="border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+                <div class="text-gray-500 text-xs font-mono">
+                    &copy; 2026 Smokehut premium concepts. All rights reserved. Created for showcase portfolio.
+                </div>
+                <div class="text-gray-500 text-xs font-mono">
+                    Crafted for visual superiority.
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Persistent Floating WhatsApp Booking CTA -->
+        <a href="https://wa.me/15550199947" target="_blank" class="fixed bottom-8 right-8 w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all z-[90] group shadow-green-500/20 duration-300">
+            <i data-lucide="message-circle" class="text-white w-7 h-7 group-hover:rotate-12 transition-transform duration-300"></i>
+            <span class="absolute right-full mr-4 bg-charcoal border border-white/10 text-white font-outfit font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none shadow-2xl translate-x-2 group-hover:translate-x-0">Reserve Table on WhatsApp</span>
+        </a>
+    </footer>
+
+    <!-- Core Script Assets -->
+    <script src="script.js"></script>
+    <script>
+        // Init Lucide Icons globally
+        lucide.createIcons();
+    </script>
+</body>
+</html>

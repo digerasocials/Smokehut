@@ -1,0 +1,179 @@
+/* ==========================================================================
+   Smokehut Premium Design Tokens & Transitions
+   ========================================================================== */
+
+:root {
+    --primary: #ff4d00;
+    --primary-rgb: 255, 77, 0;
+    --dark: #080808;
+    --charcoal: #0f0f0f;
+    --white: #ffffff;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--dark);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #e64500;
+}
+
+/* Global resets & typography */
+body {
+    background-color: var(--dark);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--dark);
+}
+
+/* ==========================================================================
+   Header & Navigation
+   ========================================================================== */
+
+/* Navbar Glassmorphism on scroll */
+#navbar.scrolled {
+    background-color: rgba(8, 8, 8, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 1rem 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Navigation Link Underline Animation */
+.nav-link {
+    position: relative;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background-color: var(--primary);
+    transition: width 0.3s ease;
+}
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* ==========================================================================
+   Cinematic Animations & Keyframes
+   ========================================================================== */
+
+/* Hero Image Zoom Out keyframe */
+@keyframes zoomOut {
+    0% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1.0);
+    }
+}
+.animate-zoomOut {
+    animation: zoomOut 20s cubic-bezier(0.25, 1, 0.50, 1) infinite alternate;
+}
+
+/* Slow Spin for icons */
+@keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+    animation: spinSlow 15s linear infinite;
+}
+
+/* ==========================================================================
+   Interactive UI Features
+   ========================================================================== */
+
+/* Blur Reveal Mask effect for confidential / masked data */
+.blur-reveal {
+    filter: blur(5px);
+    transition: filter 0.4s cubic-bezier(0.25, 1, 0.50, 1), background-color 0.3s, border-color 0.3s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.blur-reveal:hover {
+    filter: blur(0px);
+    background-color: rgba(255, 77, 0, 0.08);
+    border-color: rgba(255, 77, 0, 0.3);
+    color: var(--white) !important;
+}
+
+/* Mobile Nav Link Border Animation */
+.mobile-nav-link {
+    position: relative;
+    display: inline-block;
+}
+
+/* Active Class for Menu Tabs */
+.menu-tab-btn {
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.50, 1);
+}
+.menu-tab-btn.active {
+    background-color: var(--primary);
+    border-color: rgba(255, 77, 0, 0.4);
+    color: var(--white);
+    box-shadow: 0 8px 20px rgba(255, 77, 0, 0.25);
+}
+
+/* Menu Card Transitions */
+.menu-item-card {
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.4s ease, opacity 0.4s ease;
+}
+.menu-item-card.filtered-out {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+    pointer-events: none;
+    position: absolute;
+    z-index: -10;
+    visibility: hidden;
+}
+
+/* Star rating input styling */
+.star-rating.active {
+    color: var(--primary);
+    fill: var(--primary);
+}
+
+/* Gallery Hover Enhancements */
+.gallery-item {
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.gallery-item:hover {
+    border-color: rgba(255, 77, 0, 0.4);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+/* ==========================================================================
+   Scroll Reveal System
+   ========================================================================== */
+.reveal-el {
+    opacity: 0;
+    transform: translateY(35px);
+    transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-el.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive Overrides & Mobile Optimization */
+@media (max-width: 640px) {
+    h1 {
+        line-height: 1.05 !important;
+    }
+    .blur-reveal {
+        filter: blur(4.5px);
+    }
+}
